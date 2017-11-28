@@ -20,43 +20,40 @@ public class Main {
     private static Random random = new Random();
 
     public static void main(String[] args) {
-        //generateRandomPermutations(Contants.SIZES_TEST, true);
+        generateRandomPermutations(Contants.SIZES_TEST, true);
         generateRandomPermutations(Contants.SIZES_THIRD, false);
     }
 
     private static void generateRandomPermutations(int[] sizes, boolean printContents) {
         for (int size : sizes) {
             int[] elements = new int[size];
-            boolean[] used = new boolean[size];
             int nrOfRandomsGenerated = 0;
 
             long startTime = System.nanoTime();
             for (int i = 0; i < elements.length; i++) {
-                int number = random.nextInt(size);
+                elements[i] = i;
+                swapWithRandomPosition(elements, i);
                 nrOfRandomsGenerated++;
-
-                while (used[number]) {
-                    number = random.nextInt(size);
-                    nrOfRandomsGenerated++;
-                }
-
-                elements[i] = number;
-                used[number] = true;
             }
             long endTime = System.nanoTime();
             long durationInMs = ((endTime - startTime) / 1000000);
 
-            System.out.format("%-24s%-24d%n", "size", size);
-            System.out.format("%-24s%-24d%n", "durationInMs", durationInMs);
-            System.out.format("%-24s%-24s%n", "unique", Helpers.isUniqueArray(elements));
-            System.out.format("%-24s%-24d%n", "nrOfRandomsGenerated", nrOfRandomsGenerated);
-
+            Helpers.printResults(size, durationInMs, elements, nrOfRandomsGenerated);
             if (printContents) {
                 Helpers.printArray(elements);
             }
 
             System.out.println("");
         }
+    }
+
+    private static void swapWithRandomPosition(int[] elements, int i) {
+        int currentElement = elements[i];
+        int swapPosition = random.nextInt(i + 1);
+        int swapElement = elements[swapPosition];
+
+        elements[i] = swapElement;
+        elements[swapPosition] = currentElement;
     }
 
 }

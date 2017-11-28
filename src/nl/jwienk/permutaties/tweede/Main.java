@@ -21,7 +21,7 @@ public class Main {
     private static Random random = new Random();
 
     public static void main(String[] args) {
-        //generateRandomPermutations(Contants.SIZES_TEST, true);
+        generateRandomPermutations(Contants.SIZES_TEST, true);
         generateRandomPermutations(Contants.SIZES_SECOND, false);
     }
 
@@ -47,11 +47,7 @@ public class Main {
             long endTime = System.nanoTime();
             long durationInMs = ((endTime - startTime) / 1000000);
 
-            System.out.format("%-24s%-24d%n", "size", size);
-            System.out.format("%-24s%-24d%n", "durationInMs", durationInMs);
-            System.out.format("%-24s%-24s%n", "unique", Helpers.isUniqueArray(elements));
-            System.out.format("%-24s%-24d%n", "nrOfRandomsGenerated", nrOfRandomsGenerated);
-
+            Helpers.printResults(size, durationInMs, elements, nrOfRandomsGenerated);
             if (printContents) {
                 Helpers.printArray(elements);
             }
