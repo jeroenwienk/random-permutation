@@ -30,4 +30,9 @@ public final class Helpers {
         }
         return true;
     }
+
+    public static void writeToCSV(int[] sizes, long[][] durations) {
+
+    }
+
 }

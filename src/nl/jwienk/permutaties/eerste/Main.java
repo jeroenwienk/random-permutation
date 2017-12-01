@@ -2,7 +2,9 @@ package nl.jwienk.permutaties.eerste;
 
 import nl.jwienk.permutaties.utils.Contants;
 import nl.jwienk.permutaties.utils.Helpers;
+import nl.jwienk.permutaties.utils.SizeDuration;
 
+import java.io.FileNotFoundException;
 import java.util.Random;
 
 /**
@@ -18,45 +20,56 @@ import java.util.Random;
  */
 public class Main {
     private static Random random = new Random();
+    private static SizeDuration sizeDuration = new SizeDuration();
 
     public static void main(String[] args) {
-        generateRandomPermutations(Contants.SIZES_TEST, true);
-        generateRandomPermutations(Contants.SIZES_FIRST, false);
+        generateRandomPermutations(Contants.SIZES_TEST, 10, true);
+        generateRandomPermutations(Contants.SIZES_FIRST, 10, false);
     }
 
-    private static void generateRandomPermutations(int[] sizes, boolean printContents) {
+    private static void generateRandomPermutations(int[] sizes, int nrOfTimes, boolean printContents) {
         for (int size : sizes) {
-            int[] elements = new int[size];
-            int nrOfRandomsGenerated = 0;
+            sizeDuration.create(size);
+            for (int k = 0; k < nrOfTimes; k++) {
 
-            long startTime = System.nanoTime();
-            for (int i = 0; i < elements.length; i++) {
-                int number = random.nextInt(size);
-                nrOfRandomsGenerated++;
+                int[] elements = new int[size];
+                int nrOfRandomsGenerated = 0;
 
-                int j = 0;
-                while (j < i) {
-                    if (elements[j] == number) {
-                        number = random.nextInt(size);
-                        nrOfRandomsGenerated++;
-                        j = 0;
-                    } else {
-                        j++;
+                long startTime = System.nanoTime();
+                for (int i = 0; i < elements.length; i++) {
+                    int number = random.nextInt(size);
+                    nrOfRandomsGenerated++;
+
+                    int j = 0;
+                    while (j < i) {
+                        if (elements[j] == number) {
+                            number = random.nextInt(size);
+                            nrOfRandomsGenerated++;
+                            j = 0;
+                        } else {
+                            j++;
+                        }
                     }
+
+                    elements[i] = number;
+                }
+                long endTime = System.nanoTime();
+                long durationInMs = ((endTime - startTime) / 1000000);
+                sizeDuration.addDuration(size, durationInMs);
+
+                Helpers.printResults(size, durationInMs, elements, nrOfRandomsGenerated);
+                if (printContents) {
+                    Helpers.printArray(elements);
                 }
 
-                elements[i] = number;
+                System.out.println("");
             }
-            long endTime = System.nanoTime();
-            long durationInMs = ((endTime - startTime) / 1000000);
+        }
 
-
-            Helpers.printResults(size, durationInMs, elements, nrOfRandomsGenerated);
-            if (printContents) {
-                Helpers.printArray(elements);
-            }
-
-            System.out.println("");
+        try {
+            sizeDuration.toCSV();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

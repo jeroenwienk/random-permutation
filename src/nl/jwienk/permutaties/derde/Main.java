@@ -2,7 +2,9 @@ package nl.jwienk.permutaties.derde;
 
 import nl.jwienk.permutaties.utils.Contants;
 import nl.jwienk.permutaties.utils.Helpers;
+import nl.jwienk.permutaties.utils.SizeDuration;
 
+import java.io.FileNotFoundException;
 import java.util.Random;
 
 /**
@@ -18,32 +20,44 @@ import java.util.Random;
  */
 public class Main {
     private static Random random = new Random();
+    private static SizeDuration sizeDuration = new SizeDuration();
 
     public static void main(String[] args) {
-        generateRandomPermutations(Contants.SIZES_TEST, true);
-        generateRandomPermutations(Contants.SIZES_THIRD, false);
+        //generateRandomPermutations(Contants.SIZES_TEST, 10, true);
+        generateRandomPermutations(Contants.SIZES_THIRD, 10, false);
     }
 
-    private static void generateRandomPermutations(int[] sizes, boolean printContents) {
+    private static void generateRandomPermutations(int[] sizes, int nrOfTimes, boolean printContents) {
         for (int size : sizes) {
-            int[] elements = new int[size];
-            int nrOfRandomsGenerated = 0;
+            sizeDuration.create(size);
+            for (int k = 0; k < nrOfTimes; k++) {
 
-            long startTime = System.nanoTime();
-            for (int i = 0; i < elements.length; i++) {
-                elements[i] = i;
-                swapWithRandomPosition(elements, i);
-                nrOfRandomsGenerated++;
+                int[] elements = new int[size];
+                int nrOfRandomsGenerated = 0;
+
+                long startTime = System.nanoTime();
+                for (int i = 0; i < elements.length; i++) {
+                    elements[i] = i;
+                    swapWithRandomPosition(elements, i);
+                    nrOfRandomsGenerated++;
+                }
+                long endTime = System.nanoTime();
+                long durationInMs = ((endTime - startTime) / 1000000);
+                sizeDuration.addDuration(size, durationInMs);
+
+                Helpers.printResults(size, durationInMs, elements, nrOfRandomsGenerated);
+                if (printContents) {
+                    Helpers.printArray(elements);
+                }
+
+                System.out.println("");
             }
-            long endTime = System.nanoTime();
-            long durationInMs = ((endTime - startTime) / 1000000);
+        }
 
-            Helpers.printResults(size, durationInMs, elements, nrOfRandomsGenerated);
-            if (printContents) {
-                Helpers.printArray(elements);
-            }
-
-            System.out.println("");
+        try {
+            sizeDuration.toCSV();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
