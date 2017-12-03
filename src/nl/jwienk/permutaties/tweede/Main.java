@@ -24,8 +24,8 @@ public class Main {
     private static SizeDuration sizeDuration = new SizeDuration();
 
     public static void main(String[] args) {
-        generateRandomPermutations(Contants.SIZES_TEST, 10, true);
-        generateRandomPermutations(Contants.SIZES_SECOND, 10, false);
+        // generateRandomPermutations(Contants.SIZES_TEST, 10, true);
+        generateRandomPermutations(Contants.SIZES_SECOND, 50, false);
     }
 
     private static void generateRandomPermutations(int[] sizes, int nrOfTimes, boolean printContents) {

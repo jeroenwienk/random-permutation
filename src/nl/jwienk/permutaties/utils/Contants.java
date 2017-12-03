@@ -7,7 +7,8 @@ package nl.jwienk.permutaties.utils;
  */
 
 public final class Contants {
-    private Contants() {}
+    private Contants() {
+    }
 
     public static final int[] SIZES_FIRST = new int[]{5000, 10000, 20000, 50000, 100000, 200000};
     public static final int[] SIZES_SECOND = new int[]{100000, 200000, 500000, 1000000, 5000000, 10000000};

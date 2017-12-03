@@ -3,7 +3,8 @@ package nl.jwienk.permutaties.utils;
 import java.util.Arrays;
 
 public final class Helpers {
-    private Helpers() { }
+    private Helpers() {
+    }
 
     public static void printArray(int[] array) {
         System.out.println(Arrays.toString(array));
@@ -29,10 +30,6 @@ public final class Helpers {
 
         }
         return true;
-    }
-
-    public static void writeToCSV(int[] sizes, long[][] durations) {
-
     }
 
 }
