@@ -1,4 +1,4 @@
-package nl.jwienk.permutaties.tweede;
+package nl.jwienk.permutaties.usedPerm;
 
 import nl.jwienk.permutaties.utils.Contants;
 import nl.jwienk.permutaties.utils.Helpers;
@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 
 /**
- * We willen een random permutatie genereren van de eerste N integers. Dergelijke permutaties
+ * We willen een random permutatie genereren van de randomPerm N integers. Dergelijke permutaties
  * zijn vaak handig in simulaties. Zo zijn bijvoorbeeld [5,2,3,0,4,1] en [2,1,4,5,3,0] legale
  * permutaties (voor N=6), maar [1,0,2,4,2,5] niet want deze bevat tweemaal een 2 en geen 3.
  * Voor het creëren van een random permutatie van de getallen 0,...,N-1 hebben we de volgende
@@ -25,9 +25,15 @@ public class Main {
 
     public static void main(String[] args) {
         // generateRandomPermutations(Contants.SIZES_TEST, 10, true);
-        generateRandomPermutations(Contants.SIZES_SECOND, 50, false);
+        generateRandomPermutations(Contants.SIZES_SECOND, 10, false);
     }
 
+    /**
+     *
+     * @param sizes Welke sizes dit algoritme allemaal moet doorlopen
+     * @param nrOfTimes Aantal keren dat het algoritme moet lopen
+     * @param printContents Of de contents van de array naar de console moet worden geprint
+     */
     private static void generateRandomPermutations(int[] sizes, int nrOfTimes, boolean printContents) {
         for (int size : sizes) {
             sizeDuration.create(size);

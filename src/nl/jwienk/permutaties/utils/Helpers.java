@@ -17,7 +17,7 @@ public final class Helpers {
         System.out.format("%-24s%-24d%n", "nrOfRandomsGenerated", nrOfRandomsGenerated);
     }
 
-    private static boolean isUniqueArray(int[] array) {
+    public static boolean isUniqueArray(int[] array) {
         boolean[] used = new boolean[array.length];
 
         for (int number : array) {

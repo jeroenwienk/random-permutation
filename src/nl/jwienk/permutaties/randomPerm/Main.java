@@ -1,4 +1,4 @@
-package nl.jwienk.permutaties.derde;
+package nl.jwienk.permutaties.randomPerm;
 
 import nl.jwienk.permutaties.utils.Contants;
 import nl.jwienk.permutaties.utils.Helpers;
@@ -8,15 +8,15 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 
 /**
- * We willen een random permutatie genereren van de eerste N integers. Dergelijke permutaties
+ * We willen een random permutatie genereren van de randomPerm N integers. Dergelijke permutaties
  * zijn vaak handig in simulaties. Zo zijn bijvoorbeeld [5,2,3,0,4,1] en [2,1,4,5,3,0] legale
  * permutaties (voor N=6), maar [1,0,2,4,2,5] niet want deze bevat tweemaal een 2 en geen 3.
  * Voor het creëren van een random permutatie van de getallen 0,...,N-1 hebben we de volgende
  * drie algoritmen:
- * <p>
- * 3. Voer voor elke waarde van i tussen 0 en N-1 de volgende stappen uit: zet op positie i
- * in het array een i, dus a[i] = i. Verwissel vervolgens meteen de inhoud van a[i] met
- * een willekeurige reeds gevulde positie in de array, dus swap(a[i], a[random getaltussen 0 en i]).
+ *
+ * 1. Vul een voor een de elementen a[0] tot a[N-1] van de array a. Om element a[i] te
+ * vullen, genereer je net zo lang een random getal totdat er een is gevonden die niet
+ * gelijk is aan a[0] t/m a[i-1].
  */
 public class Main {
     private static Random random = new Random();
@@ -24,25 +24,51 @@ public class Main {
 
     public static void main(String[] args) {
         // generateRandomPermutations(Contants.SIZES_TEST, 10, true);
-        generateRandomPermutations(Contants.SIZES_THIRD, 50, false);
+        generateRandomPermutations(Contants.SIZES_FIRST, 10, false);
     }
 
+    /**
+     *
+     * @param sizes Welke sizes dit algoritme allemaal moet doorlopen
+     * @param nrOfTimes Aantal keren dat het algoritme moet lopen
+     * @param printContents Of de contents van de array naar de console moet worden geprint
+     */
     private static void generateRandomPermutations(int[] sizes, int nrOfTimes, boolean printContents) {
+        // loopen door alle sizes die gemeten moeten worden
         for (int size : sizes) {
+            // maak een nieuwe entry voor de huidige size
             sizeDuration.create(size);
+
+            // loopen door het aantal keren dat elke size gemeten moet worden
             for (int k = 0; k < nrOfTimes; k++) {
 
                 int[] elements = new int[size];
                 int nrOfRandomsGenerated = 0;
 
+                // begin hier met meten van tijd want vanaf hier loopt de te meten code
                 long startTime = System.nanoTime();
                 for (int i = 0; i < elements.length; i++) {
-                    elements[i] = i;
-                    swapWithRandomPosition(elements, i);
+                    int number = random.nextInt(size);
                     nrOfRandomsGenerated++;
+
+                    int j = 0;
+                    while (j < i) {
+                        if (elements[j] == number) {
+                            number = random.nextInt(size);
+                            nrOfRandomsGenerated++;
+                            j = 0;
+                        } else {
+                            j++;
+                        }
+                    }
+
+                    elements[i] = number;
                 }
+                // einde meting
                 long endTime = System.nanoTime();
                 long durationInMs = ((endTime - startTime) / 1000000);
+
+                // huidige resultaat toevoegen
                 sizeDuration.addDuration(size, durationInMs);
 
                 Helpers.printResults(size, durationInMs, elements, nrOfRandomsGenerated);
@@ -59,15 +85,6 @@ public class Main {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void swapWithRandomPosition(int[] elements, int i) {
-        int currentElement = elements[i];
-        int swapPosition = random.nextInt(i + 1);
-        int swapElement = elements[swapPosition];
-
-        elements[i] = swapElement;
-        elements[swapPosition] = currentElement;
     }
 
 }
